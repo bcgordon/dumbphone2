@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>30-Day Dumbphone 2 Experiment Survey</title>
+<style>
+  :root {
+    --blue: #2f6fab;
+    --gray: #555;
+    --lightgray: #f2f2f2;
+    --border: #ccc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "American Typewriter", "Courier New", Georgia, serif;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 24px 80px;
+    color: #222;
+    line-height: 1.5;
+  }
+  input, textarea, button, select { font-family: inherit; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  .subtitle { color: var(--gray); font-size: 17px; margin-top: 0; margin-bottom: 20px; }
+  h2 { color: var(--blue); border-bottom: 2px solid var(--blue); padding-bottom: 4px; margin-top: 40px; }
+  h3 { color: var(--blue); margin-top: 28px; margin-bottom: 8px; }
+  .intro, .note { font-size: 14.5px; }
+  .note { font-style: italic; color: var(--gray); }
+  .definitions {
+    background: var(--lightgray);
+    border-left: 4px solid var(--blue);
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .definitions ul { margin: 8px 0; padding-left: 22px; }
+  .field-row { margin: 10px 0; }
+  .field-row label { font-weight: 600; margin-right: 8px; }
+  .field-row input[type=text], .field-row input[type=number] {
+    padding: 5px 8px; border: 1px solid var(--border); border-radius: 4px; width: 260px; font-size: 14px;
+  }
+  table.likert { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14.5px; }
+  table.likert th { background: var(--lightgray); text-align: left; padding: 8px; font-size: 13px; }
+  table.likert th.scale { text-align: center; white-space: nowrap; }
+  table.likert td { padding: 8px; border-top: 1px solid #eee; vertical-align: middle; }
+  table.likert td.scale { text-align: center; white-space: nowrap; }
+  .scale-opt { display: inline-flex; flex-direction: column; align-items: center; margin: 0 6px; font-size: 12px; color: #666; }
+  .scale-opt input { margin: 0 0 2px; }
+  .open-q { margin: 18px 0; }
+  .open-q label { display: block; font-weight: 600; margin-bottom: 6px; }
+  .open-q textarea {
+    width: 100%; min-height: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 4px;
+    font-family: inherit; font-size: 14px; resize: vertical;
+  }
+  .score-box {
+    background: #eef4fa; border: 1px solid #cfe0ee; border-radius: 6px;
+    padding: 10px 14px; margin: 10px 0 24px; font-size: 14.5px; font-weight: 600;
+  }
+  .score-box .muted { font-weight: 400; color: var(--gray); font-size: 13px; display: block; margin-top: 2px; }
+  .delta-good { color: #1a7a3a; }
+  .delta-bad { color: #b3261e; }
+  .toolbar {
+    position: sticky; top: 0; background: #fff; padding: 12px 0; border-bottom: 1px solid var(--border);
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center; z-index: 10; margin-bottom: 8px;
+  }
+  .toolbar a { font-size: 13px; color: var(--blue); text-decoration: none; margin-right: 4px; }
+  button {
+    font-size: 13.5px; padding: 7px 14px; border-radius: 5px; border: 1px solid var(--blue);
+    background: var(--blue); color: #fff; cursor: pointer;
+  }
+  button.secondary { background: #fff; color: var(--blue); }
+  button:hover { opacity: 0.9; }
+  #importFile { display: none; }
+  .part-divider { margin: 48px 0 0; border: none; border-top: 3px solid var(--blue); }
+  .status { font-size: 13px; color: var(--gray); margin-left: 4px; }
+  @media print {
+    .toolbar { display: none; }
+    body { max-width: 100%; padding: 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="#partA">Part A</a>
+  <a href="#partB">Part B</a>
+  <a href="#partC">Part C</a>
+  <span id="autosaveStatus" class="status"></span>
+  <span style="flex:1"></span>
+  <button onclick="exportData()">Export answers (.json)</button>
+  <button class="secondary" onclick="document.getElementById('importFile').click()">Import answers</button>
+  <input type="file" id="importFile" accept="application/json" onchange="importData(event)">
+  <button class="secondary" onclick="window.print()">Print</button>
+  <button class="secondary" onclick="clearSavedData()">Clear saved answers</button>
+</div>
+
+<h1>30-Day Dumbphone 2 Experiment</h1>
+<p class="subtitle">Before &amp; After Self-Assessment Survey — Interactive Version</p>
+
+<p class="intro">Fill out <strong>Part A</strong> on the day you start your 30-day experiment. Fill out <strong>Part B</strong> on Day 30 (or the day after), based on how you've felt over the past 30 days — don't look back at Part A first. <strong>Part C</strong> is a separate usability check-in (System Usability Scale) filled out three times: Day 3, Day 15, and Day 30. Scores below are calculated automatically as you answer. Your answers are saved automatically in this browser as you type, so you can close the tab and come back anytime over the next 30 days. Use <strong>Export</strong> if you also want a backup file you can move to another computer or keep as a dated snapshot, and <strong>Import</strong> to load one back in.</p>
+
+<form id="surveyForm">
+
+<hr class="part-divider" id="partA">
+<h2>Part A — Before the Experiment</h2>
+<p class="note">Complete this section before you switch to the Dumbphone 2.</p>
+
+<div class="field-row"><label>Date:</label><input type="text" name="partA_date" placeholder="YYYY-MM-DD"></div>
+<div class="field-row"><label>Phone currently using:</label><input type="text" name="partA_phone" placeholder="e.g. iPhone"></div>
+
+<h3>1. Phone Use &amp; Habits</h3>
+<div class="field-row"><label>Estimated hours/day using my phone:</label><input type="number" step="0.1" name="partA_habits_hours"></div>
+<div class="field-row"><label>Estimated pickups per day:</label><input type="number" name="partA_habits_times"></div>
+<div id="tbl_partA_habits"></div>
+<div class="score-box">Section total: <span id="score_partA_habits">–</span> / 25 <span class="muted">Lower is generally better for this section.</span></div>
+
+<h3>2. Attention, Focus &amp; Wellbeing</h3>
+<div id="tbl_partA_attention"></div>
+<div class="score-box">Section total: <span id="score_partA_attention">–</span> / 30</div>
+
+<h3>3. Sleep Quality</h3>
+<div class="field-row"><label>Average hours of sleep/night:</label><input type="number" step="0.1" name="partA_sleep_hours"></div>
+<div class="field-row"><label>Minutes to fall asleep:</label><input type="number" name="partA_sleep_minutes"></div>
+<div id="tbl_partA_sleep"></div>
+<div class="score-box">Section total: <span id="score_partA_sleep">–</span> / 15</div>
+
+<h3>4. Social Connection &amp; Productivity</h3>
+<div id="tbl_partA_social"></div>
+<div class="score-box">Section total: <span id="score_partA_social">–</span> / 25</div>
+
+<h3>Exceptions</h3>
+<p class="note">List anything you plan to keep using your smartphone for during the experiment — one per line. Be honest and specific now, before habits creep. These are excluded from the "my phone" questions in Part B.</p>
+<div class="open-q">
+  <label>Defined exceptions (one per line)</label>
+  <textarea name="partA_exceptions" rows="5" placeholder="e.g.&#10;Morning/evening habit-tracker check-in&#10;Daily email check&#10;Hands-free driving/navigation&#10;Work travel&#10;Podcasts/audiobooks (until I find an alternative)"></textarea>
+</div>
+
+<h3>Goals &amp; Expectations</h3>
+<div class="open-q"><label>What do you hope to get out of this experiment?</label><textarea name="partA_goal1"></textarea></div>
+<div class="open-q"><label>What do you expect will be hardest about giving up your smartphone?</label><textarea name="partA_goal2"></textarea></div>
+<div class="open-q"><label>What would make this experiment feel like a success?</label><textarea name="partA_goal3"></textarea></div>
+
+<hr class="part-divider" id="partB">
+<h2>Part B — After the Experiment (Day 30)</h2>
+<p class="note">Complete this section on or right after Day 30, based on the past 30 days with the Dumbphone 2.</p>
+
+<div class="definitions">
+  <strong>Definitions:</strong> In the statements below, "my phone" means your primary, day-to-day phone — the Dumbphone 2 — not your smartphone. Your smartphone was still used for the exceptions you defined in Part A, which don't count toward these answers:
+  <ul id="exceptionsList"></ul>
+  If smartphone use expanded beyond this list at any point, note it in the compliance question below rather than letting it affect your answers above.
+</div>
+
+<div class="field-row"><label>Date:</label><input type="text" name="partB_date" placeholder="YYYY-MM-DD"></div>
+<div class="field-row"><label>Phone currently using:</label><input type="text" name="partB_phone" placeholder="e.g. Dumbphone 2"></div>
+
+<h3>1. Phone Use &amp; Habits</h3>
+<div class="field-row"><label>Estimated hours/day using my phone:</label><input type="number" step="0.1" name="partB_habits_hours"></div>
+<div class="field-row"><label>Estimated pickups per day:</label><input type="number" name="partB_habits_times"></div>
+<div id="tbl_partB_habits"></div>
+<div class="score-box">Section total: <span id="score_partB_habits">–</span> / 25
+  <span class="muted">Change from Part A: <span id="delta_habits">–</span> (a decrease is the desired direction)</span>
+</div>
+
+<h3>2. Attention, Focus &amp; Wellbeing</h3>
+<div id="tbl_partB_attention"></div>
+<div class="score-box">Section total: <span id="score_partB_attention">–</span> / 30
+  <span class="muted">Change from Part A: <span id="delta_attention">–</span></span>
+</div>
+
+<h3>3. Sleep Quality</h3>
+<div class="field-row"><label>Average hours of sleep/night:</label><input type="number" step="0.1" name="partB_sleep_hours"></div>
+<div class="field-row"><label>Minutes to fall asleep:</label><input type="number" name="partB_sleep_minutes"></div>
+<div id="tbl_partB_sleep"></div>
+<div class="score-box">Section total: <span id="score_partB_sleep">–</span> / 15
+  <span class="muted">Change from Part A: <span id="delta_sleep">–</span></span>
+</div>
+
+<h3>4. Social Connection &amp; Productivity</h3>
+<div id="tbl_partB_social"></div>
+<div class="score-box">Section total: <span id="score_partB_social">–</span> / 25
+  <span class="muted">Change from Part A: <span id="delta_social">–</span></span>
+</div>
+
+<h3>Smartphone Exception Compliance</h3>
+<div id="tbl_partB_compliance"></div>
+<div class="open-q"><label>Which exceptions, if any, expanded beyond what was defined, or where did smartphone use creep back in?</label><textarea name="partB_compliance_q1"></textarea></div>
+<div class="open-q"><label>Did any exceptions end up being replaced by an alternative device or approach? If so, what, and how did it compare?</label><textarea name="partB_compliance_q2"></textarea></div>
+
+<h3>Reflection</h3>
+<div id="tbl_partB_reflection"></div>
+<div class="open-q"><label>Would you continue using a dumbphone beyond 30 days? Why or why not?</label><textarea name="partB_reflect_q1"></textarea></div>
+<div class="open-q"><label>What did you miss most about your smartphone?</label><textarea name="partB_reflect_q2"></textarea></div>
+<div class="open-q"><label>What surprised you most during the experiment?</label><textarea name="partB_reflect_q3"></textarea></div>
+<div class="open-q"><label>What was the single biggest benefit you noticed?</label><textarea name="partB_reflect_q4"></textarea></div>
+<div class="open-q"><label>What was the single biggest challenge or downside?</label><textarea name="partB_reflect_q5"></textarea></div>
+<div class="open-q"><label>What, if anything, will you change going forward?</label><textarea name="partB_reflect_q6"></textarea></div>
+
+<hr class="part-divider" id="partC">
+<h2>Part C — Dumbphone 2 Usability Check-Ins (SUS)</h2>
+<p class="note">The System Usability Scale, adapted for the Dumbphone 2. Fill out one copy at each of three points: Day 3, Day 15, and Day 30. Answer quickly with your first reaction.</p>
+
+<h3>Check-In 1 — Day 3</h3>
+<p class="note">Complete a few days in, once you've had a chance to actually use the phone.</p>
+<div class="field-row"><label>Date:</label><input type="text" name="susA_date" placeholder="YYYY-MM-DD"></div>
+<div id="tbl_susA"></div>
+<div class="score-box">SUS Score: <span id="score_susA">–</span> / 100</div>
+
+<h3>Check-In 2 — Day 15</h3>
+<p class="note">Complete at the midpoint of the experiment.</p>
+<div class="field-row"><label>Date:</label><input type="text" name="susB_date" placeholder="YYYY-MM-DD"></div>
+<div id="tbl_susB"></div>
+<div class="score-box">SUS Score: <span id="score_susB">–</span> / 100</div>
+
+<h3>Check-In 3 — Day 30</h3>
+<p class="note">Complete on or near the last day of the experiment.</p>
+<div class="field-row"><label>Date:</label><input type="text" name="susC_date" placeholder="YYYY-MM-DD"></div>
+<div id="tbl_susC"></div>
+<div class="score-box">SUS Score: <span id="score_susC">–</span> / 100
+  <span class="muted">Trend (Day 3 → Day 15 → Day 30): <span id="sus_trend">–</span></span>
+</div>
+
+<p class="note">SUS scoring: odd items score = (rating − 1); even items score = (5 − rating); sum × 2.5 = score out of 100. Average scores across products cluster around 68; above ~80 is excellent, below ~51 is poor. The trend across your three check-ins matters more than any single number.</p>
+
+</form>
+
+<script>
+const habitsQ = [
+  "I check my phone out of habit, without a specific reason.",
+  "I feel anxious or uneasy when I don’t have my phone with me.",
+  "I reach for my phone within 5 minutes of waking up.",
+  "I lose track of time while using my phone.",
+  "I use my phone to avoid boredom or uncomfortable feelings.",
+];
+const attentionQ = [
+  "I can focus on a single task for an extended period without getting distracted.",
+  "I feel mentally restless or unable to just sit with boredom.",
+  "I compare myself to others or feel FOMO (fear of missing out).",
+  "My overall day-to-day mood is positive.",
+  "My stress or anxiety level is low.",
+  "I feel present and engaged in what I’m doing, moment to moment.",
+];
+const sleepQ = [
+  "I use my phone in bed before falling asleep.",
+  "I wake up feeling rested.",
+  "I check my phone during the night or first thing after waking.",
+];
+const socialQ = [
+  "The quality of my in-person conversations is high.",
+  "I feel present with people I’m talking to, not distracted.",
+  "I get meaningful work or tasks done each day.",
+  "I feel a sense of control over my time.",
+  "I feel connected to friends and family.",
+];
+const complianceQ = [
+  "I used my smartphone only for the defined exceptions above, not general browsing or habit.",
+];
+const reflectionQ = [
+  "Overall, this experiment was a positive experience.",
+];
+const susQ = [
+  "I think that I would like to use the Dumbphone 2 frequently.",
+  "I found the Dumbphone 2 unnecessarily complex.",
+  "I thought the Dumbphone 2 was easy to use.",
+  "I think that I would need the support of a technical person to be able to use the Dumbphone 2.",
+  "I found the various functions in the Dumbphone 2 were well integrated.",
+  "I thought there was too much inconsistency in the Dumbphone 2.",
+  "I would imagine that most people would learn to use the Dumbphone 2 very quickly.",
+  "I found the Dumbphone 2 very cumbersome/awkward to use.",
+  "I felt very confident using the Dumbphone 2.",
+  "I needed to learn a lot of things before I could get going with the Dumbphone 2.",
+];
+
+function renderLikertTable(containerId, prefix, questions, scaleLabel) {
+  const container = document.getElementById(containerId);
+  let html = '<table class="likert"><tr><th>Statement</th><th class="scale">' + scaleLabel + '</th></tr>';
+  questions.forEach((q, i) => {
+    const name = prefix + '_' + (i + 1);
+    html += '<tr><td>' + (i + 1) + '. ' + q + '</td><td class="scale">';
+    for (let v = 1; v <= 5; v++) {
+      html += '<span class="scale-opt"><input type="radio" name="' + name + '" value="' + v + '">' + v + '</span>';
+    }
+    html += '</td></tr>';
+  });
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+renderLikertTable('tbl_partA_habits', 'partA_habits', habitsQ, 'Disagree → Agree');
+renderLikertTable('tbl_partA_attention', 'partA_attention', attentionQ, 'Disagree → Agree');
+renderLikertTable('tbl_partA_sleep', 'partA_sleep', sleepQ, 'Disagree → Agree');
+renderLikertTable('tbl_partA_social', 'partA_social', socialQ, 'Disagree → Agree');
+
+renderLikertTable('tbl_partB_habits', 'partB_habits', habitsQ, 'Disagree → Agree');
+renderLikertTable('tbl_partB_attention', 'partB_attention', attentionQ, 'Disagree → Agree');
+renderLikertTable('tbl_partB_sleep', 'partB_sleep', sleepQ, 'Disagree → Agree');
+renderLikertTable('tbl_partB_social', 'partB_social', socialQ, 'Disagree → Agree');
+renderLikertTable('tbl_partB_compliance', 'partB_compliance', complianceQ, 'Disagree → Agree');
+renderLikertTable('tbl_partB_reflection', 'partB_reflection', reflectionQ, 'Disagree → Agree');
+
+renderLikertTable('tbl_susA', 'susA', susQ, 'Strongly Disagree → Strongly Agree');
+renderLikertTable('tbl_susB', 'susB', susQ, 'Strongly Disagree → Strongly Agree');
+renderLikertTable('tbl_susC', 'susC', susQ, 'Strongly Disagree → Strongly Agree');
+
+const form = document.getElementById('surveyForm');
+
+function getRadioValue(name) {
+  const el = form.querySelector('input[name="' + name + '"]:checked');
+  return el ? parseInt(el.value, 10) : null;
+}
+
+function sectionTotal(prefix, count) {
+  let total = 0, answered = 0;
+  for (let i = 1; i <= count; i++) {
+    const v = getRadioValue(prefix + '_' + i);
+    if (v !== null) { total += v; answered++; }
+  }
+  return answered === count ? total : null;
+}
+
+function susScore(prefix) {
+  let total = 0, answered = 0;
+  for (let i = 1; i <= 10; i++) {
+    const v = getRadioValue(prefix + '_' + i);
+    if (v === null) continue;
+    answered++;
+    total += (i % 2 === 1) ? (v - 1) : (5 - v);
+  }
+  return answered === 10 ? total * 2.5 : null;
+}
+
+function fmt(v) { return v === null ? '–' : v; }
+function fmtDelta(after, before) {
+  if (after === null || before === null) return '–';
+  const d = after - before;
+  return (d > 0 ? '+' : '') + d;
+}
+
+function renderExceptions() {
+  const raw = (form.elements['partA_exceptions'] ? form.elements['partA_exceptions'].value : '') || '';
+  const items = raw.split('\n').map(s => s.trim()).filter(Boolean);
+  const list = document.getElementById('exceptionsList');
+  if (!items.length) {
+    list.innerHTML = '<li class="note">(No exceptions defined yet — fill in "Exceptions" in Part A above.)</li>';
+  } else {
+    list.innerHTML = items.map(t => '<li>' + t.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
+  }
+}
+
+function recompute() {
+  renderExceptions();
+  const a_habits = sectionTotal('partA_habits', 5);
+  const a_attention = sectionTotal('partA_attention', 6);
+  const a_sleep = sectionTotal('partA_sleep', 3);
+  const a_social = sectionTotal('partA_social', 5);
+  const b_habits = sectionTotal('partB_habits', 5);
+  const b_attention = sectionTotal('partB_attention', 6);
+  const b_sleep = sectionTotal('partB_sleep', 3);
+  const b_social = sectionTotal('partB_social', 5);
+
+  document.getElementById('score_partA_habits').textContent = fmt(a_habits);
+  document.getElementById('score_partA_attention').textContent = fmt(a_attention);
+  document.getElementById('score_partA_sleep').textContent = fmt(a_sleep);
+  document.getElementById('score_partA_social').textContent = fmt(a_social);
+
+  document.getElementById('score_partB_habits').textContent = fmt(b_habits);
+  document.getElementById('score_partB_attention').textContent = fmt(b_attention);
+  document.getElementById('score_partB_sleep').textContent = fmt(b_sleep);
+  document.getElementById('score_partB_social').textContent = fmt(b_social);
+
+  document.getElementById('delta_habits').textContent = fmtDelta(b_habits, a_habits);
+  document.getElementById('delta_attention').textContent = fmtDelta(b_attention, a_attention);
+  document.getElementById('delta_sleep').textContent = fmtDelta(b_sleep, a_sleep);
+  document.getElementById('delta_social').textContent = fmtDelta(b_social, a_social);
+
+  const sA = susScore('susA'), sB = susScore('susB'), sC = susScore('susC');
+  document.getElementById('score_susA').textContent = fmt(sA);
+  document.getElementById('score_susB').textContent = fmt(sB);
+  document.getElementById('score_susC').textContent = fmt(sC);
+  const trendParts = [sA, sB, sC].map(v => v === null ? '–' : v);
+  document.getElementById('sus_trend').textContent = trendParts.join(' → ');
+}
+
+const STORAGE_KEY = 'dumbphoneSurveyData_v1';
+
+function collectData() {
+  const data = {};
+  new FormData(form).forEach((value, key) => { data[key] = value; });
+  return data;
+}
+
+function applyData(data) {
+  Object.keys(data).forEach((key) => {
+    const radios = form.querySelectorAll('input[type="radio"][name="' + key + '"]');
+    if (radios.length) {
+      radios.forEach((r) => { r.checked = (r.value === data[key]); });
+    } else {
+      const el = form.elements[key];
+      if (el) el.value = data[key];
+    }
+  });
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+    const status = document.getElementById('autosaveStatus');
+    const now = new Date();
+    status.textContent = 'Saved ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch (err) {
+    // localStorage unavailable (e.g. private browsing) — fail silently, Export still works
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    applyData(JSON.parse(raw));
+  } catch (err) {
+    // ignore corrupt/missing storage
+  }
+}
+
+function clearSavedData() {
+  if (!confirm('Clear all autosaved answers from this browser? This cannot be undone. (Exported .json files are not affected.)')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+loadFromStorage();
+recompute();
+
+form.addEventListener('change', () => { recompute(); saveToStorage(); });
+form.addEventListener('input', () => { recompute(); saveToStorage(); });
+
+function exportData() {
+  const data = collectData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const today = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = 'dumbphone-survey-' + today + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      applyData(data);
+      recompute();
+      saveToStorage();
+      alert('Answers loaded from ' + file.name);
+    } catch (err) {
+      alert('Could not read that file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+</script>
+
+</body>
+</html>
