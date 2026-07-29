@@ -46,6 +46,13 @@
   table.likert td.scale { text-align: center; white-space: nowrap; }
   .scale-opt { display: inline-flex; flex-direction: column; align-items: center; margin: 0 6px; font-size: 12px; color: #666; }
   .scale-opt input { margin: 0 0 2px; }
+  table.plan { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14.5px; }
+  table.plan th { background: var(--lightgray); text-align: left; padding: 8px; font-size: 13px; }
+  table.plan td { padding: 6px 8px; border-top: 1px solid #eee; vertical-align: middle; }
+  table.plan td.fn { font-weight: 600; width: 32%; }
+  table.plan input[type=text] {
+    width: 100%; padding: 5px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px;
+  }
   .open-q { margin: 18px 0; }
   .open-q label { display: block; font-weight: 600; margin-bottom: 6px; }
   .open-q textarea {
@@ -128,6 +135,19 @@
 <div id="tbl_partA_social"></div>
 <div class="score-box">Section total: <span id="score_partA_social">–</span> / 25</div>
 
+<h3>Replacement Plan</h3>
+<p class="note">A dumbphone doesn't do everything a smartphone does. For each function below, note the tool or workaround that will actually cover it — the plan is what makes this sustainable, not just the phone swap itself. Leave a row blank if you're not solving for it (it'll likely become an Exception below).</p>
+<table class="plan">
+  <tr><th>Function</th><th>My replacement tool / plan</th></tr>
+  <tr><td class="fn">News</td><td><input type="text" name="partA_plan_news" placeholder="e.g. print paper, radio, laptop only"></td></tr>
+  <tr><td class="fn">Audiobooks</td><td><input type="text" name="partA_plan_audiobooks" placeholder="e.g. iPod"></td></tr>
+  <tr><td class="fn">Podcasts</td><td><input type="text" name="partA_plan_podcasts" placeholder="e.g. iPod"></td></tr>
+  <tr><td class="fn">Camera</td><td><input type="text" name="partA_plan_camera" placeholder="e.g. CampSnap camera"></td></tr>
+  <tr><td class="fn">Email</td><td><input type="text" name="partA_plan_email" placeholder="e.g. laptop, defined daily check"></td></tr>
+  <tr><td><input type="text" name="partA_plan_other1_label" placeholder="Other function..."></td><td><input type="text" name="partA_plan_other1_value" placeholder="Replacement tool / plan"></td></tr>
+  <tr><td><input type="text" name="partA_plan_other2_label" placeholder="Other function..."></td><td><input type="text" name="partA_plan_other2_value" placeholder="Replacement tool / plan"></td></tr>
+</table>
+
 <h3>Exceptions</h3>
 <p class="note">List anything you plan to keep using your smartphone for during the experiment — one per line. Be honest and specific now, before habits creep. These are excluded from the "my phone" questions in Part B.</p>
 <div class="open-q">
@@ -188,6 +208,7 @@
 
 <h3>Reflection</h3>
 <div id="tbl_partB_reflection"></div>
+<div class="open-q"><label>How well did your replacement plan (News/Audiobooks/Podcasts/Camera/Email tools from Part A) hold up? Any tool that didn't work out, or that you'd swap?</label><textarea name="partB_plan_review"></textarea></div>
 <div class="open-q"><label>Would you continue using a dumbphone beyond 30 days? Why or why not?</label><textarea name="partB_reflect_q1"></textarea></div>
 <div class="open-q"><label>What did you miss most about your smartphone?</label><textarea name="partB_reflect_q2"></textarea></div>
 <div class="open-q"><label>What surprised you most during the experiment?</label><textarea name="partB_reflect_q3"></textarea></div>
